@@ -4,7 +4,7 @@
 
 ASR 依赖与 TTS 共享同一 Python 环境，如果你已安装 TTS，只需额外安装 FunASR。
 
-> 如果你还未搭建基础环境，请先参考 [TTS 安装指南](tts_install.md) 或 [完整安装指南](../INSTALL.md)。
+> 如果你还未搭建基础环境，请先参考 [TTS 安装指南](tts_install.md)。
 
 ## 安装 FunASR
 
@@ -75,3 +75,4 @@ python asr.py --input 刘娜录音.wav
 ```python
 model = AutoModel(model="paraformer-zh", device="cpu")
 ```
+
