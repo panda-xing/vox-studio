@@ -71,6 +71,7 @@ vox-studio/
 - [ASR 使用说明](docs/asr.md)
 - [ASR 安装指南](docs/asr_install.md)
 - [流式 ASR 使用说明](docs/asr_stream.md)
+- [HTTP 服务与测试说明](docs/server.md)
 
 ## 环境要求
 
