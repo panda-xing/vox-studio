@@ -1,4 +1,4 @@
-﻿# Vox Studio - 语音工坊
+# Vox Studio - 语音工坊
 
 本地 TTS 语音合成 & ASR 语音识别工具集。
 
@@ -7,42 +7,70 @@
 | 功能 | 引擎 | 说明 |
 |------|------|------|
 | TTS 语音合成 | VoxCPM2 (2B) | 30 种语言、Voice Design、声音克隆、极致克隆 |
+| 流式 TTS | VoxCPM2 (2B) | 边生成边播放、长文本分段、实时体验 |
+| TTS HTTP 服务 | VoxCPM2 (2B) | FastAPI 服务，输入文本→实时音响播放，SSE 进度 |
 | ASR 语音识别 | FunASR (Paraformer) | 50+ 语言、自动标点、VAD、实时识别 |
+| 流式 ASR | FunASR (Paraformer Streaming) | 麦克风实时采集、中间结果、边读边识别 |
+| ASR HTTP 服务 | FunASR (Streaming) | FastAPI 服务，麦克风流→控制台实时打印，SSE 结果 |
 
 ## 快速开始
 
-```bash
+``bash
 conda activate py312
 cd D:\codes\VoxCPM2
 
 # TTS 语音合成
 python tts.py --text "你好世界" --output output/hello.wav
 
+# 流式 TTS：边生成边播放
+python tts_stream.py --text "你好世界" --play
+
+# TTS HTTP 服务：输入文本→音响播放
+python tts_server.py
+curl -X POST http://localhost:8801/tts -H "Content-Type: application/json" -d "{\"text\": \"你好世界\"}"
+
 # ASR 语音识别
 python asr.py --input 刘娜录音.wav --output output/result.txt
-```
+
+# 流式 ASR：麦克风实时识别
+python asr_stream.py --mic
+
+# ASR HTTP 服务：麦克风→控制台打印
+python asr_server.py
+curl http://localhost:8802/asr/start   # 开始麦克风识别
+curl http://localhost:8802/asr/stop    # 停止识别
+curl http://localhost:8802/asr/stream  # SSE 实时接收结果
+``
 
 ## 项目结构
 
-```
+``
 vox-studio/
 ├── tts.py              # TTS 语音合成脚本
+├── tts_stream.py       # 流式 TTS 脚本（边生成边播放）
+├── tts_server.py       # TTS HTTP 服务（FastAPI，SSE 进度）
 ├── asr.py              # ASR 语音识别脚本
+├── asr_stream.py       # 流式 ASR 脚本（麦克风/边读边识别）
+├── asr_server.py       # ASR HTTP 服务（FastAPI，麦克风+文件）
 ├── 刘娜录音.wav         # 参考音色样本
 ├── output/             # 生成音频和识别结果（不入库）
 └── docs/
     ├── tts.md          # TTS 使用说明
     ├── tts_install.md  # TTS 安装指南
+    ├── tts_stream.md   # 流式 TTS 使用说明
     ├── asr.md          # ASR 使用说明
-    └── asr_install.md  # ASR 安装指南
-```
+    ├── asr_install.md  # ASR 安装指南
+    └── asr_stream.md   # 流式 ASR 使用说明
+``
 
 ## 文档
 
 - [TTS 使用说明](docs/tts.md)
 - [TTS 安装指南](docs/tts_install.md)
+- [流式 TTS 使用说明](docs/tts_stream.md)
 - [ASR 使用说明](docs/asr.md)
 - [ASR 安装指南](docs/asr_install.md)
+- [流式 ASR 使用说明](docs/asr_stream.md)
 
 ## 环境要求
 
@@ -52,6 +80,8 @@ vox-studio/
 | Python | 3.10 - 3.12 |
 | PyTorch | ≥ 2.5.0 (CUDA) |
 | CUDA | ≥ 12.0 |
+| sounddevice | 流式功能所需：pip install sounddevice |
+| FastAPI | HTTP 服务所需：pip install fastapi uvicorn sse-starlette |
 
 ## 参考项目
 
